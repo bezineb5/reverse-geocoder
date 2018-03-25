@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 exiftool_lock = threading.Lock()
 
 # Dictionary of tags for ExifTool locations to data from geopy
+# Made with the help of: https://github.com/OpenCageData/address-formatting/blob/master/conf/components.yaml
 NOMINATIM_MAPPING = {'MWG:Country': ['country', 'country_name'],
                      'MWG:State': ['state', 'province', 'region', 'island', 'state_code', 'state_district', 'county', 'county_code'],
                      'MWG:City': ['city', 'town', 'village', 'hamlet', 'locality', 'neighbourhood', 'suburb', 'city_district']}
@@ -91,7 +92,7 @@ def reverse_geocode(et, geolocator, f):
     params.append("-overwrite_original")
     params.append(f)
 
-    # Do the tagging!
+    # Do the tagging! It seems that execute_json fails in that case.
     params = map(os.fsencode, params)
     with exiftool_lock:
         log.info(et.execute(*params).decode("utf-8"))
