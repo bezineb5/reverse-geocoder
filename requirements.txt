@@ -1,0 +1,5 @@
+# Library to call various geocoders
+geopy>=1.12.0
+
+# Library to communicate easily with Exiftool
+git+git://github.com/smarnach/pyexiftool.git
