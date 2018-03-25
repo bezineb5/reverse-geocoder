@@ -1,4 +1,4 @@
-# Reverse geocoder
+# Reverse geocoder for photography
 
 This tools uses Nominatim to reverse geocode photos (i.e. put location names on coordinates of a photo). It tries its best to map is to the Metadata Working Group location fields. Then it stores the output in a sidecar XMP file.
 

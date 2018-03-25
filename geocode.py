@@ -112,7 +112,7 @@ def main():
         return
 
     # Use Nominatim, from OpenStreetMap, for reverse lookup
-    geolocator = Nominatim(user_agent="")
+    geolocator = Nominatim(user_agent="https://github.com/bezineb5/reverse-geocoder")
 
     with exiftool.ExifTool() as et:
         def geocoding(f):
