@@ -19,7 +19,7 @@ This has to be geotag prior to using this tool. You can use [exiftool to perform
 ## Tip for Olympus
 Recent Olympus cameras (tested on OM-D E-M5 Mk2) have a DateTimeUTC which greatly simplifies this process:
 ```
-exiftool -geotag $GPX_FILE '-geotime<${DateTimeUTC}+00:00' -P *.ORF -srcfile %d%f.xmp -srcfile @
+exiftool -geotag "$GPX_FILE" '-geotime<${DateTimeUTC}+00:00' -P *.ORF -srcfile %d%f.xmp -srcfile @ -o %d%f.xmp
 ```
 You have to replace $GPX_FILE by the location of the GPX track.
 

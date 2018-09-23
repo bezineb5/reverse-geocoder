@@ -98,13 +98,7 @@ def reverse_geocode(et, geolocator, f):
         log.info(et.execute(*params).decode("utf-8"))
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-
-    files = _parse_arguments()
-    if not files:
-        return
-
+def geocode_files(files, user_agent: str="https://github.com/bezineb5/reverse-geocoder"):
     all_files = []
     for file in files:
         all_files.extend(glob.glob(file))
@@ -113,7 +107,7 @@ def main():
         return
 
     # Use Nominatim, from OpenStreetMap, for reverse lookup
-    geolocator = Nominatim(user_agent="https://github.com/bezineb5/reverse-geocoder")
+    geolocator = Nominatim(user_agent=user_agent)
 
     with exiftool.ExifTool() as et:
         def geocoding(f):
@@ -123,11 +117,22 @@ def main():
                 log.exception("Error while geotagging: %s", f)
             return
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             for f in all_files:
                 executor.submit(geocoding, f)
             
             executor.shutdown()
+
+
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+    files = _parse_arguments()
+    if not files:
+        return
+
+    geocode_files(files)
+
 
 if __name__ == '__main__':
     main()
