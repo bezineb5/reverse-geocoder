@@ -14,7 +14,7 @@ pip3 install -r requirements.txt
 ```
 
 # How to geotag your photos?
-This has to be geotag prior to using this tool. You can use [exiftool to perform this task](https://sno.phy.queensu.ca/~phil/exiftool/geotag.html)
+The photos have to be geotagged prior to using this tool. You can use [exiftool to perform this task](https://sno.phy.queensu.ca/~phil/exiftool/geotag.html)
 
 ## Tip for Olympus
 Recent Olympus cameras (tested on OM-D E-M5 Mk2) have a DateTimeUTC which greatly simplifies this process:
