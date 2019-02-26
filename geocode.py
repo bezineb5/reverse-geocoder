@@ -60,11 +60,17 @@ def _map_nominatim_place_to_tags(raw_place):
 def reverse_geocode(et, geolocator, f):
     # Find place names from GPS already in file
     # Note: use the XMP tags so that lat/long has a - sign for W or S
+    log.info("Geocoding %s", f)
     with exiftool_lock:
-        gps_dict = et.get_tags(['XMP:GPSLatitude', 'XMP:GPSLongitude'], f)
+        gps_dict = et.get_tags(['XMP:GPSLatitude', 'XMP:GPSLongitude', 'XMP:Country'], f)
     lat = gps_dict.get('XMP:GPSLatitude')
     lng = gps_dict.get('XMP:GPSLongitude')
+    previous_country = gps_dict.get('XMP:Country')
     if not lat or not lng:
+        log.info("Aborting, missing lat/long")
+        return
+    if previous_country:
+        log.info("Aborting, previous country: %s", previous_country)
         return
 
     location = geolocator.reverse((lat, lng), exactly_one=True)
