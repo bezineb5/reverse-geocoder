@@ -4,9 +4,11 @@ import concurrent.futures
 import logging
 import os
 import threading
+from functools import partial
 
 import exiftool
 from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
 
 log = logging.getLogger(__name__)
 exiftool_lock = threading.Lock()
@@ -57,7 +59,7 @@ def _map_nominatim_place_to_tags(raw_place):
     return params
 
 
-def reverse_geocode(et, geolocator, f):
+def reverse_geocode(et, reverse_geolocator, f):
     # Find place names from GPS already in file
     # Note: use the XMP tags so that lat/long has a - sign for W or S
     log.info("Geocoding %s", f)
@@ -73,7 +75,7 @@ def reverse_geocode(et, geolocator, f):
         log.info("Aborting, previous country: %s", previous_country)
         return
 
-    location = geolocator.reverse((lat, lng), exactly_one=True)
+    location = reverse_geolocator((lat, lng))
 
     if not location:
         return
@@ -114,11 +116,13 @@ def geocode_files(files, user_agent: str="https://github.com/bezineb5/reverse-ge
 
     # Use Nominatim, from OpenStreetMap, for reverse lookup
     geolocator = Nominatim(user_agent=user_agent)
+    reverse_func = RateLimiter(geolocator.geocode, max_retries=1, min_delay_seconds=0.5, swallow_exceptions=False)
+    reverse_func = partial(reverse_func, exactly_one=True)
 
     with exiftool.ExifTool() as et:
         def geocoding(f):
             try:
-                reverse_geocode(et, geolocator, f)
+                reverse_geocode(et, reverse_func, f)
             except Exception as e:
                 log.exception("Error while geotagging: %s", f)
             return
