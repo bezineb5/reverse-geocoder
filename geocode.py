@@ -4,7 +4,6 @@ import concurrent.futures
 import logging
 import os
 import threading
-from functools import partial
 
 import exiftool
 from geopy.geocoders import Nominatim
@@ -116,8 +115,7 @@ def geocode_files(files, user_agent: str="https://github.com/bezineb5/reverse-ge
 
     # Use Nominatim, from OpenStreetMap, for reverse lookup
     geolocator = Nominatim(user_agent=user_agent)
-    reverse_func = RateLimiter(geolocator.geocode, max_retries=1, min_delay_seconds=0.5, swallow_exceptions=False)
-    reverse_func = partial(reverse_func, exactly_one=True)
+    reverse_func = RateLimiter(geolocator.reverse, max_retries=1, min_delay_seconds=0.5, swallow_exceptions=False)
 
     with exiftool.ExifTool() as et:
         def geocoding(f):

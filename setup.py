@@ -17,13 +17,13 @@
 from distutils.core import setup
 
 setup(name="reverse-geocoder",
-      version="0.1",
+      version="0.2",
       description="Reverse geocoding library for photos",
       license="MIT",
       author="Benjamin Bezine",
       url="https://github.com/bezineb5/reverse-geocoder",
       install_requires=[
-        "geopy>=1.18.1"
+        "geopy>=2.0.0"
       ],
       dependency_links=[
         "git+ssh://git@github.com/smarnach/pyexiftool.git"

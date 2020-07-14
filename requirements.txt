@@ -1,5 +1,8 @@
 # Library to call various geocoders
-geopy>=1.18.1
+geopy>=2.0.0
+
+# Optional import for geopy to use HTTP keepalive
+requests>=2.23.0
 
 # Library to communicate easily with Exiftool
 git+git://github.com/smarnach/pyexiftool.git
