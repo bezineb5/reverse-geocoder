@@ -23,10 +23,8 @@ setup(name="reverse-geocoder",
       author="Benjamin Bezine",
       url="https://github.com/bezineb5/reverse-geocoder",
       install_requires=[
-        "geopy>=2.0.0"
-      ],
-      dependency_links=[
-        "git+ssh://git@github.com/smarnach/pyexiftool.git"
+        "geopy>=2.0.0",
+        "pyexiftool>=0.1.1"
       ],
       classifiers=[
           "Development Status :: 3 - Alpha",

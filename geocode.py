@@ -63,9 +63,9 @@ def reverse_geocode(et, reverse_geolocator, f):
     # Note: use the XMP tags so that lat/long has a - sign for W or S
     log.info("Geocoding %s", f)
     with exiftool_lock:
-        gps_dict = et.get_tags(['XMP:GPSLatitude', 'XMP:GPSLongitude', 'XMP:Country'], f)
-    lat = gps_dict.get('XMP:GPSLatitude')
-    lng = gps_dict.get('XMP:GPSLongitude')
+        gps_dict = et.get_tags(['XMP:GPSLatitude', 'XMP:GPSLongitude', 'XMP:Country', 'Composite:GPSLatitude', 'Composite:GPSLongitude'], f)
+    lat = gps_dict.get('XMP:GPSLatitude', gps_dict.get('Composite:GPSLatitude'))
+    lng = gps_dict.get('XMP:GPSLongitude', gps_dict.get('Composite:GPSLongitude'))
     previous_country = gps_dict.get('XMP:Country')
     if not lat or not lng:
         log.info("Aborting, missing lat/long")
