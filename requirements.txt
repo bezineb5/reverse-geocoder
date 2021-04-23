@@ -5,4 +5,4 @@ geopy>=2.0.0
 requests>=2.23.0
 
 # Library to communicate easily with Exiftool
-git+git://github.com/smarnach/pyexiftool.git
+PyExifTool==0.4.7
