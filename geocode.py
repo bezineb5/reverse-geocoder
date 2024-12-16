@@ -39,14 +39,15 @@ NOMINATIM_MAPPING = {
     ],
 }
 
+DEFAULT_USER_AGENT = "https://github.com/bezineb5/reverse-geocoder"
 
-def _parse_arguments() -> Iterable[str]:
+def _parse_arguments():
     parser = argparse.ArgumentParser(
         description="Simple reverse geocoding with geopy and exiftool"
     )
     parser.add_argument("files", nargs="+", help="files to reverse geocode")
-    files = parser.parse_args().files
-    return files
+    parser.add_argument("-ua", required=False, default=DEFAULT_USER_AGENT)
+    return parser.parse_args()
 
 
 def _map_nominatim_place_to_tags(raw_place: Dict[str, Any]) -> List[str]:
@@ -164,7 +165,7 @@ def geocode_files(
     reverse_func = RateLimiter(
         geolocator.reverse,
         max_retries=1,
-        min_delay_seconds=0.5,
+        min_delay_seconds=1,
         swallow_exceptions=False,
     )
 
@@ -187,11 +188,11 @@ def geocode_files(
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    files = _parse_arguments()
-    if not files:
+    args = _parse_arguments()
+    if not args.files:
         return
 
-    geocode_files(files)
+    geocode_files(args.files, user_agent=args.ua)
 
 
 if __name__ == "__main__":
